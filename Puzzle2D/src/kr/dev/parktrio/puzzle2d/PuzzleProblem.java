@@ -3,10 +3,9 @@ package kr.dev.parktrio.puzzle2d;
 import java.util.Random;
 
 public class PuzzleProblem {
-	private final int xCount;
-	private final int yCount;
+	private int xCount;
+	private int yCount;
 
-	private int[] problemOrigin;
 	private int[] problemState;
 
 	public PuzzleProblem(int size) {
@@ -21,23 +20,49 @@ public class PuzzleProblem {
 	}
 
 	private void generateProblem() {
-		this.problemOrigin = new int[this.xCount * this.yCount];
+		this.problemState = new int[this.xCount * this.yCount];
 
 		Random rand = new Random();
-		for (int i=0; i < this.problemOrigin.length; i++)
+		for (int i=0; i < this.problemState.length; i++)
 		{
-			this.problemOrigin[i] = rand.nextInt(this.problemOrigin.length);
-			for (int j=0; j < i; j++)
-			{
-				if (this.problemOrigin[j] == this.problemOrigin[i])
-				{
-					i--;
-					break;
-				}
-			}
+			this.problemState[i] = i;
 		}
 
-		this.problemState = this.problemOrigin.clone();
+		for (int i=0; i < this.problemState.length * 2; i++)
+		{
+			int direction = rand.nextInt(4);
+			int xIndex = rand.nextInt(this.xCount);
+			int yIndex = rand.nextInt(this.yCount);
+
+			switch (direction) {
+			case 0:	// up
+				if (!this.moveUp(xIndex, yIndex))
+				{
+					this.moveDown(xIndex, yIndex);
+				}
+				break;
+			case 1:	// down
+				if (!this.moveDown(xIndex, yIndex))
+				{
+					this.moveUp(xIndex, yIndex);
+				}
+				break;
+			case 2:	// left
+				if (!this.moveLeft(xIndex, yIndex))
+				{
+					this.moveRight(xIndex, yIndex);
+				}
+				break;
+			case 3:	// right
+				if (!this.moveRight(xIndex, yIndex))
+				{
+					this.moveLeft(xIndex, yIndex);
+				}
+				break;
+			default:
+				break;
+			}
+		}
 	}
 
 	private boolean swapSell(int fromIndex, int toIndex) {
@@ -71,22 +96,22 @@ public class PuzzleProblem {
 			return false;
 		}
 
-		if (getValue(xIndex - 1, yIndex) == this.problemOrigin.length-1)
+		if (getValue(xIndex - 1, yIndex) == this.problemState.length-1)
 		{
 			return moveLeft(xIndex, yIndex);
 		}
 
-		if (getValue(xIndex + 1, yIndex) == this.problemOrigin.length-1)
+		if (getValue(xIndex + 1, yIndex) == this.problemState.length-1)
 		{
 			return moveRight(xIndex, yIndex);
 		}
 
-		if (getValue(xIndex, yIndex - 1) == this.problemOrigin.length-1)
+		if (getValue(xIndex, yIndex - 1) == this.problemState.length-1)
 		{
 			return moveUp(xIndex, yIndex);
 		}
 
-		if (getValue(xIndex, yIndex + 1) == this.problemOrigin.length-1)
+		if (getValue(xIndex, yIndex + 1) == this.problemState.length-1)
 		{
 			return moveDown(xIndex, yIndex);
 		}
@@ -200,22 +225,22 @@ public class PuzzleProblem {
 			return false;
 		}
 
-		if (getValue(xIndex - 1, yIndex) == this.problemOrigin.length-1)
+		if (getValue(xIndex - 1, yIndex) == this.problemState.length-1)
 		{
 			return true;
 		}
 
-		if (getValue(xIndex + 1, yIndex) == this.problemOrigin.length-1)
+		if (getValue(xIndex + 1, yIndex) == this.problemState.length-1)
 		{
 			return true;
 		}
 
-		if (getValue(xIndex, yIndex - 1) == this.problemOrigin.length-1)
+		if (getValue(xIndex, yIndex - 1) == this.problemState.length-1)
 		{
 			return true;
 		}
 
-		if (getValue(xIndex, yIndex + 1) == this.problemOrigin.length-1)
+		if (getValue(xIndex, yIndex + 1) == this.problemState.length-1)
 		{
 			return true;
 		}
@@ -235,6 +260,13 @@ public class PuzzleProblem {
 		return true;
 	}
 
+	public void refreshProblem(int xSize, int ySize) {
+		this.xCount = xSize;
+		this.yCount = ySize;
+
+		this.refreshProblem();
+	}
+
 	public void refreshProblem() {
 		this.generateProblem();
 	}
@@ -248,7 +280,7 @@ public class PuzzleProblem {
 	}
 
 	public int freeTileIndex() {
-		return this.problemOrigin.length - 1;
+		return this.problemState.length - 1;
 	}
 
 

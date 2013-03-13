@@ -28,6 +28,21 @@
             android:layout_height="wrap_content"
             android:layout_gravity="right|center_vertical"
             android:text="Reset" />
+
+        <EditText
+            android:id="@+id/editHard"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="1"
+            android:inputType="number"
+            android:maxLength="1"
+            android:maxLines="1"
+            android:text="3" >
+
+            <requestFocus />
+        </EditText>
+
     </LinearLayout>
 
     <RelativeLayout
