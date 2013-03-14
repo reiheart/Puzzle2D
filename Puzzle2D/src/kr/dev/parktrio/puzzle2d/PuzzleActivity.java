@@ -110,7 +110,7 @@ public class PuzzleActivity extends Activity implements OnClickListener {
 
 		this.tileView = null;
 
-		this.layoutPuzzleTiles.refreshDrawableState();
+		this.layoutPuzzleTiles.invalidate();
 	}
 
 	@Override

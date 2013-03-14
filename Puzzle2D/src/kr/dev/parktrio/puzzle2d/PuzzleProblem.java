@@ -3,6 +3,7 @@ package kr.dev.parktrio.puzzle2d;
 import java.util.Random;
 
 public class PuzzleProblem {
+	private final int problemMagicNumber = 5;
 	private int xCount;
 	private int yCount;
 
@@ -28,39 +29,14 @@ public class PuzzleProblem {
 			this.problemState[i] = i;
 		}
 
-		for (int i=0; i < this.problemState.length * 2; i++)
+		for (int i=0; i < this.problemState.length * problemMagicNumber; i++)
 		{
-			int direction = rand.nextInt(4);
 			int xIndex = rand.nextInt(this.xCount);
 			int yIndex = rand.nextInt(this.yCount);
 
-			switch (direction) {
-			case 0:	// up
-				if (!this.moveUp(xIndex, yIndex))
-				{
-					this.moveDown(xIndex, yIndex);
-				}
-				break;
-			case 1:	// down
-				if (!this.moveDown(xIndex, yIndex))
-				{
-					this.moveUp(xIndex, yIndex);
-				}
-				break;
-			case 2:	// left
-				if (!this.moveLeft(xIndex, yIndex))
-				{
-					this.moveRight(xIndex, yIndex);
-				}
-				break;
-			case 3:	// right
-				if (!this.moveRight(xIndex, yIndex))
-				{
-					this.moveLeft(xIndex, yIndex);
-				}
-				break;
-			default:
-				break;
+			if (!this.moveTile(xIndex, yIndex))
+			{
+				i--;
 			}
 		}
 	}
